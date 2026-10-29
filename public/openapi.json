@@ -1,0 +1,91 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "N+T Creative Studio Public & Agent API",
+    "version": "1.0.0",
+    "description": "Machine-readable API for N+T Creative Studio (founded by Navya Choyal and Tripti Bhatter in India). Provides studio identity, founders, philosophy, featured projects, and commission inquiry endpoints.",
+    "contact": {
+      "name": "N+T Creative Studio (Navya Choyal & Tripti Bhatter)",
+      "email": "hello@nplust.in",
+      "url": "https://nplust.in"
+    }
+  },
+  "servers": [
+    {
+      "url": "/",
+      "description": "N+T Creative Studio Server"
+    }
+  ],
+  "paths": {
+    "/api/studio": {
+      "get": {
+        "operationId": "getStudioProfile",
+        "summary": "Retrieve N+T Creative Studio profile, founders, philosophy, and contact information",
+        "responses": {
+          "200": {
+            "description": "N+T Studio structured profile"
+          }
+        }
+      }
+    },
+    "/api/projects": {
+      "get": {
+        "operationId": "getFeaturedProjects",
+        "summary": "List featured creative works by N+T Studio including Transit Production",
+        "responses": {
+          "200": {
+            "description": "List of featured works"
+          }
+        }
+      }
+    },
+    "/api/inquiries": {
+      "post": {
+        "operationId": "submitStudioInquiry",
+        "summary": "Submit a project commission or collaboration inquiry to N+T Studio",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["name", "email"],
+                "properties": {
+                  "name": { "type": "string" },
+                  "email": { "type": "string", "format": "email" },
+                  "scope": { "type": "string" },
+                  "message": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Inquiry recorded confirmation"
+          }
+        }
+      }
+    },
+    "/api/mcp": {
+      "get": {
+        "operationId": "getMcpServerInfo",
+        "summary": "Model Context Protocol (MCP) server discovery endpoint",
+        "responses": {
+          "200": {
+            "description": "MCP server capabilities and tool specifications"
+          }
+        }
+      },
+      "post": {
+        "operationId": "invokeMcpTool",
+        "summary": "Execute an MCP JSON-RPC request against N+T Studio",
+        "responses": {
+          "200": {
+            "description": "MCP JSON-RPC response"
+          }
+        }
+      }
+    }
+  }
+}

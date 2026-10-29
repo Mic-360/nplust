@@ -1,0 +1,41 @@
+# N+T Creative Studio
+
+> N+T is a multi-disciplinary creative studio founded by Navya Choyal and Tripti Bhatter in India, working across branding, design, identity, and creative communication through multiple mediums for brands and individuals in architecture, art, fashion, beauty, hospitality, and their cultural intersections.
+
+N+T is an extension of Navya Choyal and Tripti Bhatter’s creative practice. With 6+ years of building brands, the studio operates at the intersection of culture, storytelling, and intentional design.
+
+## Core Identity & Philosophy
+- **Studio Name**: N+T (N+T Creative Studio / nplust.in)
+- **Founders**: Navya Choyal and Tripti Bhatter
+- **Experience**: 6+ years of building brands across cultural disciplines
+- **Location**: India (Serving clients globally)
+- **Contact Email**: hello@nplust.in
+- **Instagram**: @nplust.in (https://instagram.com/nplust.in)
+- **Methodology**: Led by intuition, N+T understands design as a part of life, with stories and dialogue at the core of everything. Each project starts with a deconstruction of the known, analysing cultural relevance, attending to feelings first, and then shifting focus to form, informed by the multiple layers of meaning it holds.
+
+## Services & Capabilities
+- Brand Strategy & Positioning
+- Visual Identity Systems & Brand Architecture
+- Websites & Digital Experiences
+- Packaging Design & Tactile Print Mediums
+- Creative Direction & Moving Image Production
+- Creative Communication Across Multiple Mediums
+
+## Cultural Sectors & Industries
+- Architecture & Spatial Design
+- Contemporary Art & Cultural Institutions
+- Fashion & Apparel
+- Beauty & Wellness
+- Hospitality & Culinary Experiences
+
+## Featured Work
+- **Transit Production**: Visual identity, emblem design, and creative direction exploring coastal narratives, cinema, and lived stories in South India.
+
+## Machine-Readable & Agent Discovery Endpoints
+- [Full Studio Knowledge Base](/llms-full.txt): Complete Markdown reference for answer engines and LLMs
+- [OpenAPI 3.1 Specification](/openapi.json): REST API schema for studio profile, projects, and inquiries
+- [API Catalog (RFC 9727)](/.well-known/api-catalog): Linkset catalog of discoverable APIs
+- [Agent Card (A2A)](/.well-known/agent.json): Autonomous agent capabilities and interface manifest
+- [MCP Server Card](/.well-known/mcp/server-card.json): Model Context Protocol server specification
+- [Agent Skills Index](/.well-known/agent-skills/index.json): Structured operating skills for AI agents
+- [Studio Inquiry Skill Manual](/.well-known/agent-skills/nt-studio/SKILL.md): Instructions for AI agents interacting with N+T Studio

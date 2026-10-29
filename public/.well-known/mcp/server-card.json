@@ -1,0 +1,65 @@
+{
+  "schemaVersion": "1.0",
+  "name": "nt-creative-studio-mcp",
+  "title": "N+T Creative Studio MCP Server",
+  "description": "Model Context Protocol (MCP) server for N+T Creative Studio (Navya Choyal & Tripti Bhatter) providing structured studio identity, founders, portfolio works, and commission inquiry tools.",
+  "version": "1.0.0",
+  "homepage": "https://nplust.in",
+  "documentationUrl": "/llms-full.txt",
+  "endpoints": {
+    "http": "/api/mcp",
+    "openapi": "/openapi.json"
+  },
+  "authentication": {
+    "type": "none"
+  },
+  "capabilities": {
+    "resources": true,
+    "tools": true,
+    "prompts": true
+  },
+  "tools": [
+    {
+      "name": "get_studio_profile",
+      "description": "Get complete studio profile, manifesto, founders (Navya Choyal & Tripti Bhatter), services, industries, and contact details for N+T Creative Studio.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "name": "get_featured_projects",
+      "description": "Get featured brand identity and creative direction projects by N+T Studio, including Transit Production.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "name": "submit_studio_inquiry",
+      "description": "Submit a project commission or collaboration inquiry to N+T Studio (hello@nplust.in).",
+      "inputSchema": {
+        "type": "object",
+        "required": ["name", "email", "scope", "message"],
+        "properties": {
+          "name": { "type": "string", "description": "Sender name or organization" },
+          "email": { "type": "string", "format": "email", "description": "Sender email address" },
+          "scope": { "type": "string", "description": "Discipline or project context (e.g., Branding & Identity, Architecture, Fashion, Hospitality, Websites & Packaging)" },
+          "message": { "type": "string", "description": "Project overview and timeline notes" }
+        }
+      }
+    }
+  ],
+  "resources": [
+    {
+      "uri": "https://nplust.in/llms.txt",
+      "name": "N+T Studio Summary (llms.txt)",
+      "mimeType": "text/markdown"
+    },
+    {
+      "uri": "https://nplust.in/llms-full.txt",
+      "name": "N+T Studio Full Knowledge Base (llms-full.txt)",
+      "mimeType": "text/markdown"
+    }
+  ]
+}

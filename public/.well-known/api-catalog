@@ -1,0 +1,25 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://nplust.in/api",
+      "service-desc": [
+        {
+          "href": "https://nplust.in/openapi.json",
+          "type": "application/vnd.oai.openapi+json"
+        }
+      ],
+      "service-doc": [
+        {
+          "href": "https://nplust.in/llms-full.txt",
+          "type": "text/markdown"
+        }
+      ],
+      "status": [
+        {
+          "href": "https://nplust.in/api/health",
+          "type": "application/json"
+        }
+      ]
+    }
+  ]
+}

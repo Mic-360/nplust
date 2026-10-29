@@ -1,0 +1,14 @@
+/* TEAM */
+Studio: N+T Creative Studio
+Co-Founder: Navya Choyal
+Co-Founder: Tripti Bhatter
+Contact: hello@nplust.in
+Instagram: @nplust.in
+Location: India
+
+/* SITE */
+Last update: 2026/10/16
+Language: English
+Doctype: HTML5
+Standards: Schema.org JSON-LD, OpenGraph, llms.txt, Model Context Protocol (MCP), WebMCP, Agent Skills, RFC 8288 Link Headers
+Typography: Helvetica Neue LT Std

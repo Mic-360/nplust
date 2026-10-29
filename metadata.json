@@ -1,0 +1,6 @@
+{
+  "name": "N+T Creative Studio",
+  "description": "N+T is a multi-disciplinary creative studio working across branding, design, identity, and creative communication for brands and individuals in architecture, art, fashion, hospitality, and their cultural intersections.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

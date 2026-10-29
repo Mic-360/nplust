@@ -1,0 +1,57 @@
+{
+  "name": "N+T Creative Studio Agent Interface",
+  "description": "N+T is a multi-disciplinary creative studio founded by Navya Choyal and Tripti Bhatter in India, working across branding, design, identity, websites, packaging, and creative communication for architecture, art, fashion, beauty, hospitality, and their cultural intersections.",
+  "url": "https://nplust.in",
+  "version": "1.0.0",
+  "provider": {
+    "organization": "N+T Creative Studio",
+    "url": "https://nplust.in",
+    "contactEmail": "hello@nplust.in"
+  },
+  "documentationUrl": "/llms-full.txt",
+  "capabilities": {
+    "streaming": false,
+    "pushNotifications": false,
+    "stateTransitionHistory": false,
+    "markdownNegotiation": true,
+    "webMcp": true
+  },
+  "defaultInputModes": ["text/plain", "application/json"],
+  "defaultOutputModes": ["text/markdown", "application/json"],
+  "authentication": {
+    "schemes": ["none"]
+  },
+  "skills": [
+    {
+      "id": "studio-profile",
+      "name": "Retrieve N+T Studio Profile & Founders",
+      "description": "Returns authoritative information about N+T Creative Studio, founders Navya Choyal and Tripti Bhatter, studio philosophy, disciplines, and sectors served.",
+      "tags": ["branding", "design", "identity", "architecture", "fashion", "art", "hospitality", "india"],
+      "examples": [
+        "Who founded N+T Creative Studio?",
+        "What services and mediums does N+T work across?"
+      ],
+      "endpoint": "/api/studio"
+    },
+    {
+      "id": "featured-works",
+      "name": "Retrieve Featured Works",
+      "description": "Lists featured creative direction and brand identity works by N+T Studio, including Transit Production.",
+      "tags": ["portfolio", "transit-production", "identity", "film"],
+      "examples": [
+        "Show featured projects by N+T Studio"
+      ],
+      "endpoint": "/api/projects"
+    },
+    {
+      "id": "studio-inquiry",
+      "name": "Submit Commission or Project Inquiry",
+      "description": "Submits a commission or collaboration inquiry to Navya Choyal and Tripti Bhatter at N+T Studio.",
+      "tags": ["contact", "commission", "inquiry"],
+      "examples": [
+        "Send a branding inquiry to N+T Studio"
+      ],
+      "endpoint": "/api/inquiries"
+    }
+  ]
+}

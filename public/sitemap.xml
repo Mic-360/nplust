@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+>
+  <url>
+    <loc>https://nplust.in/</loc>
+    <lastmod>2026-10-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://nplust.in/banner.png</image:loc>
+      <image:title>Transit Production — Featured Work by N+T Creative Studio</image:title>
+      <image:caption>Documentary coastal scene and brand identity for Transit Production by N+T Studio.</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://nplust.in/banner-badge.png</image:loc>
+      <image:title>Transit Production Emblem</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://nplust.in/logo.png</image:loc>
+      <image:title>N+T Creative Studio Logo</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://nplust.in/about</loc>
+    <lastmod>2026-10-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://nplust.in/n.png</image:loc>
+      <image:title>Navya Choyal — Co-Founder of N+T Creative Studio</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://nplust.in/t.png</image:loc>
+      <image:title>Tripti Bhatter — Co-Founder of N+T Creative Studio</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://nplust.in/llms.txt</loc>
+    <lastmod>2026-10-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://nplust.in/llms-full.txt</loc>
+    <lastmod>2026-10-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+</urlset>

@@ -1,0 +1,15 @@
+{
+  "version": "1.0.0",
+  "organization": "N+T Creative Studio",
+  "description": "Agent Skills directory for N+T Creative Studio (Navya Choyal & Tripti Bhatter).",
+  "skills": [
+    {
+      "id": "nt-studio",
+      "name": "N+T Creative Studio Profile & Inquiry Skill",
+      "description": "Query N+T Creative Studio's founders, design philosophy, creative services, featured works, and submit commission inquiries.",
+      "path": "/.well-known/agent-skills/nt-studio/SKILL.md",
+      "openapi": "/openapi.json",
+      "mcp": "/.well-known/mcp/server-card.json"
+    }
+  ]
+}

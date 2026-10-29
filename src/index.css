@@ -1,0 +1,36 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    font-family: "Helvetica Neue LT Std", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color-scheme: light;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    overscroll-behavior-y: none;
+    overflow-x: clip;
+    background-color: #000000;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: #000000;
+    color: #000000;
+    font-family: "Helvetica Neue LT Std", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    overscroll-behavior-y: none;
+    overflow-x: clip;
+    position: relative;
+  }
+
+  #root {
+    overflow-x: clip;
+  }
+}
+
+.font-editorial {
+  font-family: "Helvetica Neue LT Std", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
