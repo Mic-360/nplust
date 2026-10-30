@@ -7,16 +7,15 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { AboutUsPage } from './components/AboutUsPage';
 import { Footer, PageRoute } from './components/Footer';
 import { HomePage } from './components/HomePage';
-import { registerWebMcpTools, updatePageSeo } from './utils/seoAndAgentReady';
+import { NotFoundPage } from './components/NotFoundPage';
+import {
+  migrateLegacyHashAndResolveRoute,
+  registerWebMcpTools,
+  updatePageSeo,
+} from './utils/seoAndAgentReady';
 
-function getInitialRoute(): PageRoute {
-  if (typeof window === 'undefined') return 'home';
-  const hash = window.location.hash.toLowerCase();
-  const path = window.location.pathname.toLowerCase();
-  if (hash.includes('about') || path.includes('about')) {
-    return 'about';
-  }
-  return 'home';
+export interface AppProps {
+  initialRoute?: PageRoute;
 }
 
 function smoothScrollToTop(topAnchor?: HTMLElement | null) {
@@ -39,8 +38,11 @@ function smoothScrollToTop(topAnchor?: HTMLElement | null) {
   }
 }
 
-export default function App() {
-  const [currentPage, setCurrentPage] = useState<PageRoute>(getInitialRoute);
+export default function App({ initialRoute }: AppProps) {
+  const [currentPage, setCurrentPage] = useState<PageRoute>(() => {
+    if (initialRoute) return initialRoute;
+    return migrateLegacyHashAndResolveRoute();
+  });
   const topAnchorRef = useRef<HTMLDivElement>(null);
 
   const handleNavigate = useCallback((page: PageRoute) => {
@@ -48,13 +50,13 @@ export default function App() {
     updatePageSeo(page);
 
     if (typeof window !== 'undefined') {
-      const targetHash = page === 'about' ? '#about-us' : '';
-      if (window.location.hash !== targetHash) {
-        window.history.pushState(
-          { page },
-          '',
-          page === 'about' ? '#about-us' : window.location.pathname
-        );
+      const targetPath = page === 'about' ? '/about' : '/';
+      if (window.location.pathname !== targetPath || window.location.hash) {
+        try {
+          window.history.pushState({ page }, '', targetPath);
+        } catch {
+          // Ignore if history API is restricted
+        }
       }
 
       smoothScrollToTop(topAnchorRef.current);
@@ -67,8 +69,13 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    updatePageSeo(currentPage);
-  }, [currentPage]);
+    const resolved = migrateLegacyHashAndResolveRoute();
+    if (resolved !== currentPage) {
+      setCurrentPage(resolved);
+    }
+    updatePageSeo(resolved);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     registerWebMcpTools({
@@ -78,7 +85,9 @@ export default function App() {
 
   useEffect(() => {
     const onPopState = () => {
-      setCurrentPage(getInitialRoute());
+      const nextRoute = migrateLegacyHashAndResolveRoute();
+      setCurrentPage(nextRoute);
+      updatePageSeo(nextRoute);
       smoothScrollToTop(topAnchorRef.current);
     };
     window.addEventListener('popstate', onPopState);
@@ -92,8 +101,10 @@ export default function App() {
     >
       {currentPage === 'home' ? (
         <HomePage />
-      ) : (
+      ) : currentPage === 'about' ? (
         <AboutUsPage />
+      ) : (
+        <NotFoundPage onNavigate={handleNavigate} />
       )}
 
       <Footer

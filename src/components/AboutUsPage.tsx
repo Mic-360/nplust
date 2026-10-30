@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 
 export const AboutUsPage: React.FC = () => {
-  const [hasScrolled, setHasScrolled] = useState(false);
+  const [hideUntilScroll, setHideUntilScroll] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 8) {
-        setHasScrolled(true);
+        setHideUntilScroll(false);
       } else {
-        setHasScrolled(false);
+        setHideUntilScroll(true);
       }
     };
 
@@ -18,20 +18,8 @@ export const AboutUsPage: React.FC = () => {
   }, []);
 
   return (
-    <main
-      className="w-full bg-white text-black pr-5 sm:pr-8 pl-3 md:pr-12 lg:pl-4 lg:pr-16 pt-8 sm:pt-11 md:pt-[48px] pb-20 sm:pb-28 md:pb-36"
-      itemScope
-      itemType="https://schema.org/AboutPage"
-    >
-      <article
-        className="w-full"
-        itemScope
-        itemType="https://schema.org/Organization"
-      >
-        <meta itemProp="name" content="N+T Creative Studio" />
-        <meta itemProp="email" content="hello@nplust.in" />
-        <meta itemProp="url" content="https://nplust.in/" />
-
+    <main className="w-full bg-white text-black pr-5 sm:pr-8 pl-3 md:pr-12 lg:pl-4 lg:pr-16 pt-8 sm:pt-11 md:pt-[48px] pb-20 sm:pb-28 md:pb-36">
+      <article className="w-full">
         {/* Top Section: Full initial viewport with portraits + heading at top and single-line captions at bottom */}
         <div className="fluid-engine fe-6acce34c605d356c2444b49a min-h-[calc(100svh-2rem)] sm:min-h-[calc(100svh-2.75rem)] md:min-h-[calc(100svh-48px)] pb-6 sm:pb-8 md:pb-10 grid grid-cols-8 md:grid-cols-24 gap-x-2 sm:gap-x-2.5 md:gap-x-[9px] gap-y-6 md:gap-y-0 content-between items-start">
           {/* Block 1: Heading Block (Top on Mobile, Cols 10-24 on Desktop) */}
@@ -45,7 +33,6 @@ export const AboutUsPage: React.FC = () => {
                   <div className="sqs-html-content">
                     <h1
                       id="studio-headline"
-                      itemProp="slogan"
                       style={{ whiteSpace: 'pre-wrap' }}
                       className="text-[26px] sm:text-[32px] md:text-[34px] lg:text-[43px] xl:text-[51px] 2xl:text-[54px] leading-[1.16] font-normal tracking-[-0.018em] text-black m-0"
                     >
@@ -62,12 +49,7 @@ export const AboutUsPage: React.FC = () => {
           <div
             id="block-1c003f898c017a26f859"
             className="fe-block fe-block-1c003f898c017a26f859 col-span-4 md:col-start-1 md:col-end-5 md:row-start-1 mt-6 md:mt-0"
-            itemProp="founder"
-            itemScope
-            itemType="https://schema.org/Person"
           >
-            <meta itemProp="name" content="Navya Choyal" />
-            <meta itemProp="jobTitle" content="Co-Founder, Designer & Creative Strategist" />
             <div className="sqs-block website-component-block sqs-block-website-component sqs-block-image image-block">
               <div className="sqs-block-content">
                 <div className="fluid-image-component-root image-block-outer-wrapper design-layout-fluid image-position-left">
@@ -78,7 +60,6 @@ export const AboutUsPage: React.FC = () => {
                         <img
                           src="/n.png"
                           alt="Navya Choyal — Co-founder of N+T"
-                          itemProp="image"
                           width={192}
                           height={302}
                           loading="eager"
@@ -102,12 +83,7 @@ export const AboutUsPage: React.FC = () => {
           <div
             id="block-4fbd433eeefa34350bb8"
             className="fe-block fe-block-4fbd433eeefa34350bb8 col-span-4 md:col-start-5 md:col-end-9 md:row-start-1 mt-6 md:mt-0"
-            itemProp="founder"
-            itemScope
-            itemType="https://schema.org/Person"
           >
-            <meta itemProp="name" content="Tripti Bhatter" />
-            <meta itemProp="jobTitle" content="Co-Founder, Designer & Creative Strategist" />
             <div className="sqs-block website-component-block sqs-block-website-component sqs-block-image image-block">
               <div className="sqs-block-content">
                 <div className="fluid-image-component-root image-block-outer-wrapper design-layout-fluid image-position-left">
@@ -118,7 +94,6 @@ export const AboutUsPage: React.FC = () => {
                         <img
                           src="/t.png"
                           alt="Tripti Bhatter — Co-founder of N+T"
-                          itemProp="image"
                           width={189}
                           height={302}
                           loading="eager"
@@ -147,9 +122,7 @@ export const AboutUsPage: React.FC = () => {
               <div className="sqs-block-content">
                 <div className="sqs-text-block-container">
                   <div className="sqs-html-content">
-                    <p
-                      className="text-[14px] sm:text-[16px] md:text-[18px] leading-[1.28] font-normal tracking-[-0.01em] text-black whitespace-nowrap m-0"
-                    >
+                    <p className="text-[14px] sm:text-[16px] md:text-[18px] leading-[1.28] font-normal tracking-[-0.01em] text-black whitespace-nowrap m-0">
                       Navya Choyal
                     </p>
                   </div>
@@ -167,9 +140,7 @@ export const AboutUsPage: React.FC = () => {
               <div className="sqs-block-content">
                 <div className="sqs-text-block-container">
                   <div className="sqs-html-content">
-                    <p
-                      className="text-[14px] sm:text-[16px] md:text-[18px] leading-[1.28] font-normal tracking-[-0.01em] text-black whitespace-nowrap m-0"
-                    >
+                    <p className="text-[14px] sm:text-[16px] md:text-[18px] leading-[1.28] font-normal tracking-[-0.01em] text-black whitespace-nowrap m-0">
                       Tripti Bhatter
                     </p>
                   </div>
@@ -179,15 +150,14 @@ export const AboutUsPage: React.FC = () => {
           </div>
         </div>
 
-        {/* About Us Section Page Text (4 Large Editorial Paragraphs appearing after scroll) */}
+        {/* About Us Section Page Text (4 Large Editorial Paragraphs) */}
         <section
           id="studio-manifesto"
-          itemProp="description"
           aria-label="About N+T Creative Studio"
           className={`mt-6 sm:mt-8 md:mt-10 max-w-[1160px] space-y-8 sm:space-y-10 md:space-y-12 text-[24px] sm:text-[30px] md:text-[38px] lg:text-[46px] xl:text-[51px] leading-[1.18] font-normal tracking-[-0.018em] text-[#949494] transition-all duration-500 ease-out ${
-            hasScrolled
-              ? 'opacity-100 translate-y-0'
-              : 'opacity-0 translate-y-4 pointer-events-none'
+            hideUntilScroll
+              ? 'opacity-0 translate-y-4 pointer-events-none'
+              : 'opacity-100 translate-y-0'
           }`}
         >
           <p>

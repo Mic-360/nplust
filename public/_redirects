@@ -1,0 +1,10 @@
+/home      /        301
+/home/     /        301
+/index.html /       301
+/aboutus   /about   301
+/aboutus/  /about   301
+/about-us  /about   301
+/about-us/ /about   301
+/about/    /about   301
+/about     /about.html 200
+/*         /404.html 404

@@ -3,71 +3,16 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { createServer as createViteServer } from 'vite';
+import {
+  FEATURED_PROJECTS,
+  generateSitemapXml,
+  PageRoute,
+  STUDIO_DATA,
+} from './src/data/studioData';
+import { renderRouteHtml } from './src/renderRouteHtml';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-const STUDIO_PROFILE = {
-  name: 'N+T Creative Studio',
-  shortName: 'N+T',
-  url: 'https://nplust.in',
-  location: 'India',
-  email: 'hello@nplust.in',
-  instagram: '@nplust.in',
-  instagramUrl: 'https://instagram.com/nplust.in',
-  founders: [
-    {
-      name: 'Navya Choyal',
-      role: 'Co-Founder, Designer, Creative Strategist & Thinker',
-      portrait: '/n.png',
-    },
-    {
-      name: 'Tripti Bhatter',
-      role: 'Co-Founder, Designer, Creative Strategist & Thinker',
-      portrait: '/t.png',
-    },
-  ],
-  topStatement:
-    'N+T is an extension of Navya Choyal and Tripti Bhatter’s creative practice.',
-  footerStatement:
-    'N+T is a multi-disciplinary creative studio working across branding, design, identity, creative communication through multiple mediums for brands and individuals in architecture, art, fashion, hospitality, and their cultural intersections.',
-  aboutStatement: [
-    'We’re a multi-service studio with 6+ yrs of building brands across art, fashion, beauty, architecture, hospitality, and the cultural intersections that exist between and beyond them.',
-    'Led by intuition, we understand design as a part of life, with stories and dialogue at the core of everything we do.',
-    'Our work is well-paced and intentional; each project starts with a deconstruction of the known, analysing cultural relevance, attending to feelings first, and then shifting our focus to form, informed by the multiple layers of meaning it holds.',
-    'We believe in closely building relationships with individuals, founders and institutions. As designers, creative strategists and thinkers, we extend our practice across identities, websites, packaging, branding, design and creative communication, working across different mediums and shaping each project around its context and purpose.',
-  ],
-  services: [
-    'Identities',
-    'Websites',
-    'Packaging',
-    'Branding',
-    'Design',
-    'Creative Communication',
-    'Creative Strategy',
-  ],
-  industries: [
-    'Architecture',
-    'Art',
-    'Fashion',
-    'Beauty',
-    'Hospitality',
-    'Cultural Intersections',
-  ],
-};
-
-const FEATURED_PROJECTS = [
-  {
-    id: 'transit-production',
-    title: 'Transit Production',
-    client: 'Transit Production',
-    disciplines: ['Identity', 'Creative Direction', 'Moving Image'],
-    heroImage: '/banner.png',
-    badgeImage: '/banner-badge.png',
-    summary:
-      'Visual identity and production emblem crafted by N+T for Transit Production, exploring cultural narratives across cinema, coastal architecture, and lived stories.',
-  },
-];
 
 const inquiriesLog: Array<{
   id: string;
@@ -86,12 +31,16 @@ const AGENT_DISCOVERY_LINKS = [
   '</.well-known/mcp/server-card.json>; rel="mcp-server"; type="application/json"',
   '</.well-known/agent-skills/index.json>; rel="agent-skills"; type="application/json"',
   '</.well-known/agent.json>; rel="agent"; type="application/json"',
-  '</sitemap.xml>; rel="sitemap"; type="application/xml"',
+  '<https://nplust.in/sitemap.xml>; rel="sitemap"; type="application/xml"',
 ].join(', ');
 
-async function startServer() {
+const ASSET_EXTENSION_REGEX =
+  /\.(webp|avif|png|jpg|jpeg|gif|ico|svg|woff2?|ttf|eot|css|js|mjs|map|json|xml|txt|md)$/i;
+
+export async function createApp(options?: { isProduction?: boolean }) {
   const app = express();
-  const PORT = 3000;
+  const isProd =
+    options?.isProduction ?? process.env.NODE_ENV === 'production';
 
   app.use(express.json());
 
@@ -103,9 +52,20 @@ async function startServer() {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Accept, Authorization');
-    if (/\.(webp|avif|png|jpg|jpeg|ico|svg|woff2?)$/i.test(req.path)) {
-      res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+
+    // Protect preview domains from indexing while allowing production and local verification
+    const host = (req.hostname || '').toLowerCase();
+    if (host.endsWith('.run.app')) {
+      res.setHeader('X-Robots-Tag', 'noindex, nofollow');
     }
+
+    // Cache hashed Vite assets immutably; use revalidation for mutable unhashed public images
+    if (req.path.startsWith('/assets/') || req.url.includes('?v=')) {
+      res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+    } else if (/\.(webp|avif|png|jpg|jpeg|ico|svg|woff2?)$/i.test(req.path)) {
+      res.setHeader('Cache-Control', 'public, max-age=86400, stale-while-revalidate=604800');
+    }
+
     if (req.method === 'OPTIONS') {
       res.status(204).end();
       return;
@@ -113,11 +73,47 @@ async function startServer() {
     next();
   });
 
+  // One-hop 301 canonical redirects for legacy routes and trailing slashes
+  app.use((req, res, next) => {
+    if (req.method !== 'GET' && req.method !== 'HEAD') {
+      next();
+      return;
+    }
+
+    const rawPath = req.path;
+    const querySuffix = req.url.includes('?')
+      ? req.url.slice(req.url.indexOf('?'))
+      : '';
+
+    if (
+      rawPath === '/home' ||
+      rawPath === '/home/' ||
+      rawPath === '/index.html'
+    ) {
+      res.redirect(301, `/${querySuffix}`);
+      return;
+    }
+
+    if (
+      rawPath === '/aboutus' ||
+      rawPath === '/aboutus/' ||
+      rawPath === '/about-us' ||
+      rawPath === '/about-us/' ||
+      rawPath === '/about/' ||
+      rawPath === '/about.html'
+    ) {
+      res.redirect(301, `/about${querySuffix}`);
+      return;
+    }
+
+    next();
+  });
+
   // Health Check endpoint (referenced in /.well-known/api-catalog)
   app.get('/api/health', (_req, res) => {
     res.json({
       status: 'ok',
-      studio: STUDIO_PROFILE.name,
+      studio: STUDIO_DATA.name,
       agentReady: true,
       timestamp: new Date().toISOString(),
     });
@@ -125,7 +121,7 @@ async function startServer() {
 
   // Studio Profile API
   app.get('/api/studio', (_req, res) => {
-    res.json(STUDIO_PROFILE);
+    res.json(STUDIO_DATA);
   });
 
   // Featured Projects API
@@ -153,8 +149,8 @@ async function startServer() {
     inquiriesLog.push(record);
     res.json({
       status: 'received',
-      studio: 'N+T Creative Studio',
-      contactEmail: STUDIO_PROFILE.email,
+      studio: STUDIO_DATA.name,
+      contactEmail: STUDIO_DATA.email,
       inquiry: record,
     });
   });
@@ -237,7 +233,7 @@ async function startServer() {
           jsonrpc: '2.0',
           id,
           result: {
-            content: [{ type: 'text', text: JSON.stringify(STUDIO_PROFILE, null, 2) }],
+            content: [{ type: 'text', text: JSON.stringify(STUDIO_DATA, null, 2) }],
           },
         });
         return;
@@ -271,7 +267,7 @@ async function startServer() {
             content: [
               {
                 type: 'text',
-                text: `Inquiry recorded for N+T Studio (${STUDIO_PROFILE.email}): ${JSON.stringify(record)}`,
+                text: `Inquiry recorded for N+T Studio (${STUDIO_DATA.email}): ${JSON.stringify(record)}`,
               },
             ],
           },
@@ -284,13 +280,18 @@ async function startServer() {
       jsonrpc: '2.0',
       id,
       result: {
-        studio: STUDIO_PROFILE.name,
+        studio: STUDIO_DATA.name,
         documentation: '/llms-full.txt',
       },
     });
   });
 
-  // Explicit MIME types for .well-known discovery routes
+  // Unknown /api/* endpoints must return 404 JSON, never 200 HTML
+  app.all('/api/*', (_req, res) => {
+    res.status(404).json({ error: 'API endpoint not found' });
+  });
+
+  // Explicit MIME types for .well-known discovery routes and sitemap
   app.get('/.well-known/api-catalog', (_req, res) => {
     const filePath = path.join(__dirname, 'public', '.well-known', 'api-catalog');
     if (fs.existsSync(filePath)) {
@@ -298,6 +299,10 @@ async function startServer() {
       return;
     }
     res.status(404).end();
+  });
+
+  app.get('/sitemap.xml', (_req, res) => {
+    res.type('application/xml; charset=utf-8').send(generateSitemapXml());
   });
 
   app.get(['/llms.txt', '/llms-full.txt', '/.well-known/agent-skills/nt-studio/SKILL.md'], (req, res, next) => {
@@ -311,7 +316,7 @@ async function startServer() {
     next();
   });
 
-  // Markdown Content Negotiation for `/` and `/about` (isitagentready.com Content Accessibility check)
+  // Markdown Content Negotiation for `/` and `/about`
   app.use((req, res, next) => {
     if (req.method === 'GET' && (req.path === '/' || req.path === '/about')) {
       const acceptHeader = (req.headers.accept || '').toLowerCase();
@@ -334,27 +339,100 @@ async function startServer() {
     next();
   });
 
-  if (process.env.NODE_ENV !== 'production') {
+  if (!isProd) {
     const vite = await createViteServer({
       server: {
         middlewareMode: true,
         hmr: false,
         watch: process.env.DISABLE_HMR === 'true' ? null : {},
       },
-      appType: 'spa',
+      appType: 'custom',
     });
+
     app.use(vite.middlewares);
+
+    const serveDevRoute = async (
+      req: express.Request,
+      res: express.Response,
+      route: PageRoute,
+      statusCode: number
+    ) => {
+      try {
+        const rawTemplate = fs.readFileSync(path.join(__dirname, 'index.html'), 'utf-8');
+        const transformed = await vite.transformIndexHtml(req.originalUrl, rawTemplate);
+        const html = renderRouteHtml(transformed, route);
+        res.status(statusCode).type('text/html; charset=utf-8').send(html);
+      } catch (err) {
+        res.status(500).send(String(err));
+      }
+    };
+
+    app.get('/', (req, res) => serveDevRoute(req, res, 'home', 200));
+    app.get('/about', (req, res) => serveDevRoute(req, res, 'about', 200));
+
+    app.get('*', (req, res) => {
+      if (ASSET_EXTENSION_REGEX.test(req.path)) {
+        res.status(404).type('text/plain; charset=utf-8').send('Not Found');
+        return;
+      }
+      serveDevRoute(req, res, 'not-found', 404);
+    });
   } else {
     const distPath = path.join(__dirname, 'dist');
-    app.use(express.static(distPath));
-    app.get('*', (_req, res) => {
-      res.sendFile(path.join(distPath, 'index.html'));
+    const publicPath = path.join(__dirname, 'public');
+
+    const sendPrerenderedOrFallback = (
+      res: express.Response,
+      route: PageRoute,
+      prerenderedFile: string,
+      statusCode: number
+    ) => {
+      const targetFile = path.join(distPath, prerenderedFile);
+      if (fs.existsSync(targetFile)) {
+        res.status(statusCode).type('text/html; charset=utf-8').send(fs.readFileSync(targetFile, 'utf-8'));
+        return;
+      }
+      const fallbackTemplatePath = fs.existsSync(path.join(distPath, 'index.html'))
+        ? path.join(distPath, 'index.html')
+        : path.join(__dirname, 'index.html');
+      const rawTemplate = fs.readFileSync(fallbackTemplatePath, 'utf-8');
+      const html = renderRouteHtml(rawTemplate, route);
+      res.status(statusCode).type('text/html; charset=utf-8').send(html);
+    };
+
+    app.get('/', (_req, res) => {
+      sendPrerenderedOrFallback(res, 'home', 'index.html', 200);
+    });
+
+    app.get('/about', (_req, res) => {
+      sendPrerenderedOrFallback(res, 'about', 'about.html', 200);
+    });
+
+    // Serve static files with redirect: false so /about never redirects to /about/
+    app.use(express.static(distPath, { index: false, redirect: false }));
+    app.use(express.static(publicPath, { index: false, redirect: false }));
+
+    app.get('*', (req, res) => {
+      if (ASSET_EXTENSION_REGEX.test(req.path)) {
+        res.status(404).type('text/plain; charset=utf-8').send('Not Found');
+        return;
+      }
+      sendPrerenderedOrFallback(res, 'not-found', '404.html', 404);
     });
   }
 
-  app.listen(PORT, '0.0.0.0', () => {
-    console.log(`N+T Creative Studio server listening on http://localhost:${PORT}`);
-  });
+  return app;
 }
 
-startServer();
+const isMainModule =
+  process.argv[1] &&
+  path.resolve(process.argv[1]) === path.resolve(__filename);
+
+if (isMainModule) {
+  const PORT = Number(process.env.PORT) || 3000;
+  createApp().then((app) => {
+    app.listen(PORT, '0.0.0.0', () => {
+      console.log(`N+T Creative Studio server listening on http://localhost:${PORT}`);
+    });
+  });
+}

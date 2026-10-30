@@ -1,5 +1,4 @@
 # N+T Creative Studio — AI, Search & Agent Crawler Policy
-# Optimized for SEO, AEO (Answer Engine Optimization), GEO (Generative Engine Optimization), and isitagentready.com
 
 User-agent: *
 Allow: /
@@ -64,5 +63,5 @@ User-agent: CCBot
 Allow: /
 
 # Discovery Resources
-Sitemap: /sitemap.xml
+Sitemap: https://nplust.in/sitemap.xml
 LLMs-Txt: /llms.txt

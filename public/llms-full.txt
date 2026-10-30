@@ -1,12 +1,12 @@
 # N+T Creative Studio — Comprehensive Knowledge Base (llms-full.txt)
 
-> N+T is a multi-disciplinary creative studio working across branding, design, identity, creative communication through multiple mediums for brands and individuals in architecture, art, fashion, hospitality, and their cultural intersections.
+> N+T is a creative studio bringing art, design and cultural perspective together to build identities with context, character and relevance.
 
 ---
 
-## 1. Executive Summary (Answer Engine Ready)
+## 1. Executive Summary
 
-**N+T** (`nplust.in`) is an independent, multi-disciplinary creative and brand design studio based in **India**, founded and led by **Navya Choyal** and **Tripti Bhatter**. N+T is an extension of Navya Choyal and Tripti Bhatter’s creative practice, bringing **6+ years of experience** building brands across **art, fashion, beauty, architecture, hospitality**, and the cultural intersections that exist between and beyond them.
+**N+T** (`https://nplust.in/`) is a creative studio in **India** founded by **Navya Choyal** and **Tripti Bhatter**. N+T is an extension of Navya Choyal and Tripti Bhatter’s creative practice, with **6+ years of building brands** across **architecture, art, fashion, hospitality, beauty**, and the cultural intersections that exist between and beyond them.
 
 ---
 
@@ -16,7 +16,7 @@
 N+T is an extension of Navya Choyal and Tripti Bhatter’s creative practice.
 
 ### About Us Statement
-We’re a multi-service studio with 6+ yrs of building brands across art, fashion, beauty, architecture, hospitality, and the cultural intersections that exist between and beyond them.
+We’re a multi-service studio with 6+ yrs of building brands across architecture, art, fashion, hospitality, beauty and the cultural intersections that exist between and beyond them.
 
 Led by intuition, we understand design as a part of life, with stories and dialogue at the core of everything we do.
 
@@ -25,7 +25,7 @@ Our work is well-paced and intentional; each project starts with a deconstructio
 We believe in closely building relationships with individuals, founders and institutions. As designers, creative strategists and thinkers, we extend our practice across identities, websites, packaging, branding, design and creative communication, working across different mediums and shaping each project around its context and purpose.
 
 ### Footer Summary
-N+T is a multi-disciplinary creative studio working across branding, design, identity, creative communication through multiple mediums for brands and individuals in architecture, art, fashion, hospitality, and their cultural intersections.
+N+T is a creative studio bringing art, design and cultural perspective together to build identities with context, character and relevance.
 
 ---
 
@@ -41,27 +41,16 @@ N+T is a multi-disciplinary creative studio working across branding, design, ide
 ## 4. Featured Project: Transit Production
 
 - **Client / Subject**: Transit Production
-- **Deliverables**: Brand Identity, Emblem Design, Creative Direction, Moving Image Still Direction
-- **Visual Assets**: `/banner.png` (Documentary coastal photograph of a traditional painted South Indian fishing boat `IND.TN.02.MO.2457` with women in vibrant silk sarees on the shore), `/banner-badge.png` (White Transit Production emblem flanked by six five-pointed stars)
+- **Deliverables**: Identity, Creative Direction, Moving Image
+- **Visual Assets**: `/banner.png`, `/banner-badge.png`
 
 ---
 
-## 5. Frequently Asked Questions (AEO / GEO Reference)
+## 5. Official Contact & Profiles
 
-### What is N+T Creative Studio?
-N+T is a multi-disciplinary creative studio based in India that works across branding, design, identity, websites, packaging, and creative communication through multiple mediums for brands, founders, individuals, and institutions.
-
-### Who founded N+T Creative Studio?
-N+T was founded by **Navya Choyal** and **Tripti Bhatter** as an extension of their shared creative practice, backed by over 6 years of brand-building experience.
-
-### Which industries and sectors does N+T serve?
-N+T specializes in **architecture, art, fashion, beauty, hospitality**, and the cultural intersections between and beyond these domains.
-
-### What is N+T's design philosophy?
-Led by intuition, N+T approaches design as a part of life centered on stories and dialogue. Their process is well-paced and intentional: deconstructing the known, analyzing cultural relevance, attending to feelings first, and then shaping form around the layers of meaning, context, and purpose of each project.
-
-### How do I contact N+T Studio for a commission or inquiry?
+- **Website**: `https://nplust.in/`
+- **About Page**: `https://nplust.in/about`
 - **Email**: `hello@nplust.in`
-- **Instagram**: `@nplust.in`
+- **Instagram**: `@nplust.in` (`https://www.instagram.com/nplust.in/`)
+- **LinkedIn**: `@n-plus-t` (`https://www.linkedin.com/company/n-plus-t`)
 - **Location**: India
-- **API Endpoint**: `POST /api/inquiries` (JSON payload with `name`, `email`, `scope`, `message`)

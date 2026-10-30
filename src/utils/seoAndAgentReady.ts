@@ -1,53 +1,11 @@
-import { PageRoute } from '../components/Footer';
+import {
+  getRouteMetadata,
+  PageRoute,
+  resolveRouteFromPathname,
+  STUDIO_DATA,
+} from '../data/studioData';
 
-export const STUDIO_DATA = {
-  name: 'N+T Creative Studio',
-  shortName: 'N+T',
-  domain: 'https://nplust.in',
-  location: 'India',
-  email: 'hello@nplust.in',
-  instagram: '@nplust.in',
-  instagramUrl: 'https://instagram.com/nplust.in',
-  founders: [
-    {
-      name: 'Navya Choyal',
-      role: 'Co-Founder, Designer, Creative Strategist & Thinker',
-      image: '/n.png',
-    },
-    {
-      name: 'Tripti Bhatter',
-      role: 'Co-Founder, Designer, Creative Strategist & Thinker',
-      image: '/t.png',
-    },
-  ],
-  topStatement:
-    'N+T is an extension of Navya Choyal and Tripti Bhatter’s creative practice.',
-  footerStatement:
-    'N+T is a multi-disciplinary creative studio working across branding, design, identity, creative communication through multiple mediums for brands and individuals in architecture, art, fashion, hospitality, and their cultural intersections.',
-  aboutParagraphs: [
-    'We’re a multi-service studio with 6+ yrs of building brands across art, fashion, beauty, architecture, hospitality, and the cultural intersections that exist between and beyond them.',
-    'Led by intuition, we understand design as a part of life, with stories and dialogue at the core of everything we do.',
-    'Our work is well-paced and intentional; each project starts with a deconstruction of the known, analysing cultural relevance, attending to feelings first, and then shifting our focus to form, informed by the multiple layers of meaning it holds.',
-    'We believe in closely building relationships with individuals, founders and institutions. As designers, creative strategists and thinkers, we extend our practice across identities, websites, packaging, branding, design and creative communication, working across different mediums and shaping each project around its context and purpose.',
-  ],
-  disciplines: [
-    'Branding',
-    'Design',
-    'Visual Identity',
-    'Websites',
-    'Packaging',
-    'Creative Communication',
-    'Creative Strategy',
-  ],
-  sectors: [
-    'Architecture',
-    'Art',
-    'Fashion',
-    'Beauty',
-    'Hospitality',
-    'Cultural Intersections',
-  ],
-};
+export { STUDIO_DATA, resolveRouteFromPathname };
 
 function setMetaContent(selector: string, content: string) {
   if (typeof document === 'undefined') return;
@@ -57,37 +15,51 @@ function setMetaContent(selector: string, content: string) {
   }
 }
 
+export function migrateLegacyHashAndResolveRoute(): PageRoute {
+  if (typeof window === 'undefined') return 'home';
+
+  const rawHash = window.location.hash.toLowerCase();
+  if (rawHash === '#about-us' || rawHash === '#about' || rawHash === '#/about') {
+    try {
+      window.history.replaceState({ page: 'about' }, '', '/about');
+    } catch {
+      // Ignore if history API is restricted
+    }
+    return 'about';
+  }
+
+  return resolveRouteFromPathname(window.location.pathname);
+}
+
 export function updatePageSeo(page: PageRoute) {
-  if (typeof document === 'undefined' || typeof window === 'undefined') return;
+  if (typeof document === 'undefined') return;
 
-  const origin = window.location.origin || 'https://nplust.in';
-  const isAbout = page === 'about';
+  const meta = getRouteMetadata(page);
 
-  const title = isAbout
-    ? 'About Us — Navya Choyal & Tripti Bhatter | N+T Creative Studio'
-    : 'N+T — Multi-Disciplinary Creative Studio | Navya Choyal & Tripti Bhatter';
+  document.title = meta.title;
 
-  const description = isAbout
-    ? 'N+T is an extension of Navya Choyal and Tripti Bhatter’s creative practice. A multi-service studio with 6+ yrs of building brands across art, fashion, beauty, architecture, and hospitality.'
-    : STUDIO_DATA.footerStatement;
-
-  const canonicalUrl = isAbout ? `${origin}/#about-us` : `${origin}/`;
-  const ogImage = isAbout ? `${origin}/n.png` : `${origin}/banner.png`;
-
-  document.title = title;
-
-  setMetaContent('meta[name="description"]', description);
-  setMetaContent('meta[property="og:title"]', title);
-  setMetaContent('meta[property="og:description"]', description);
-  setMetaContent('meta[property="og:url"]', canonicalUrl);
-  setMetaContent('meta[property="og:image"]', ogImage);
-  setMetaContent('meta[name="twitter:title"]', title);
-  setMetaContent('meta[name="twitter:description"]', description);
-  setMetaContent('meta[name="twitter:image"]', ogImage);
+  setMetaContent('meta[name="description"]', meta.description);
+  setMetaContent('meta[name="robots"]', meta.robots);
+  setMetaContent('meta[name="googlebot"]', meta.robots);
+  setMetaContent('meta[name="bingbot"]', meta.robots);
+  setMetaContent('meta[property="og:title"]', meta.title);
+  setMetaContent('meta[property="og:description"]', meta.description);
+  setMetaContent('meta[property="og:url"]', meta.canonicalUrl);
+  setMetaContent('meta[property="og:image"]', meta.ogImage);
+  setMetaContent('meta[property="og:image:alt"]', meta.ogImageAlt);
+  setMetaContent('meta[name="twitter:title"]', meta.title);
+  setMetaContent('meta[name="twitter:description"]', meta.description);
+  setMetaContent('meta[name="twitter:image"]', meta.ogImage);
+  setMetaContent('meta[name="twitter:image:alt"]', meta.ogImageAlt);
 
   const canonicalEl = document.getElementById('canonical-link') as HTMLLinkElement | null;
   if (canonicalEl) {
-    canonicalEl.href = canonicalUrl;
+    canonicalEl.href = meta.canonicalUrl;
+  }
+
+  const jsonLdEl = document.getElementById('route-jsonld');
+  if (jsonLdEl) {
+    jsonLdEl.textContent = JSON.stringify(meta.jsonLd);
   }
 }
 
@@ -121,7 +93,7 @@ export function registerWebMcpTools(handlers: {
     },
     {
       name: 'navigate_studio_page',
-      description: 'Navigate between the N+T Studio Home page and About Us page.',
+      description: 'Navigate between the N+T Studio Home page (/) and About Us page (/about).',
       inputSchema: {
         type: 'object',
         required: ['page'],
@@ -136,7 +108,7 @@ export function registerWebMcpTools(handlers: {
       execute: async (args: Record<string, unknown>) => {
         const target = args.page === 'about' ? 'about' : 'home';
         handlers.onNavigate(target);
-        return { status: 'navigated', page: target };
+        return { status: 'navigated', page: target, path: target === 'about' ? '/about' : '/' };
       },
     },
   ];
